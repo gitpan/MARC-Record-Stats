@@ -11,8 +11,9 @@ my $builder = Module::Build->new(
         'Test::Most' => 0,
     },
     requires			=> {
-    	'version'	=> 0,
+    	'version'		=> 0,
     	'MARC::Record'	=> 0,
+    	'Getopt::Euclid'=> 0,
     },
     add_to_cleanup      => [ 'Marc-Record-Stats-*' ],
     create_makefile_pl => 'traditional',
