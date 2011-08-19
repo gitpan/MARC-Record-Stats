@@ -1,10 +1,12 @@
-Build.PL
 Changes
 MANIFEST
+Makefile.PL
 README
 lib/MARC/Record/Stats.pm
+lib/MARC/Record/Stats/Report.pm
 t/00-load.t
 t/10-stats.t
 t/manifest.t
 t/pod-coverage.t
 t/pod.t
+META.yml

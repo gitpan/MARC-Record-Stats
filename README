@@ -1,6 +1,8 @@
 Marc-Record-Stats
 
-Calculates the occurence of the tags and subtags in the list of MARC::Record objects
+Scans MARC::Record objects and calculates for every tag and subtag:
+- how many records have it
+- whether it repeats at least in one record
 
 INSTALLATION
 

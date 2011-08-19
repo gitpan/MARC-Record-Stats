@@ -4,34 +4,63 @@ use warnings;
 use strict;
 use version;
 
+use MARC::Record::Stats::Report;
+
 =head1 NAME
 
-Marc::Record::Stats - scans one or many MARC::Record and gives a statistics on the tags and subtags
+MARC::Record::Stats - scans one or many MARC::Record and gives a statistics on the tags and subtags
 
 =head1 VERSION
 
-Version 0.0.1
+Version 0.0.3
 
 =cut
 
-our $VERSION = qv('0.0.1');
+our $VERSION = qv('0.0.3');
 
 
 =head1 SYNOPSIS
 
-    use Marc::Record::Stats;
-    use Data::Dumper;
-	...
-	# single record statistics
-	# $record is a MARC::Record
-    my $stats1 = Marc::Record::Stats->new( $record );
-    
-    # many records statistics
-    # $records is a reference to an array of MARC::Record
-    my $stats2 = Marc::Record::Stats->new( $records, $stats1 );
-    ...
-    Data::Dumper->Dump([$stats1, $stats2],['stats1', 'stats2']);
+This module provides functionality for L<marcstats.pl> script.
+Description of the module interface follows.
 
+    use MARC::Record::Stats;
+	
+	{
+		my $records = [];
+		
+		# code skipped ...
+		my $stats = MARC::Record::Stats->new;
+	
+		# $records is array of MARC::Record
+		for my $r ( @$records ) {
+			$stats->add_record_to_stats( $r );
+		}
+	
+		$stats->report( *STDOUT, { dots => 1 } );
+	}
+	
+	###
+	### Some useless features:
+	###
+	{
+		my $record;
+		my $records = [];
+		# code skipped ...
+		
+		# single record statistics
+		# $record is a MARC::Record
+    	my $stats1 = Marc::Record::Stats->new( $record );
+    
+    	# merge $stats1 and statistics for $records
+    	# $records is a reference to an array of MARC::Record
+    	my $stats2 = Marc::Record::Stats->new( $records, $stats1 );
+    	# ...
+    	
+    	$stats1->report( *STDOUT );
+#    	$stats2->report( *STDOUT );
+	}
+	
 =head1 METHODS
 
 =head2 new $records [, $stats]
@@ -68,6 +97,20 @@ sub new {
 	}
 	return $self;
 }
+
+=head2 report $fh, $config
+
+Prints out a report on the collected statistics to a filehandle $fh.
+$config keeps configuretion for the reporter. See L<MARC::Record::Stats::Report>
+for details
+
+=cut
+
+sub report {
+	my ($self, $fh, $config) = @_;
+	MARC::Record::Stats::Report->report($fh, $self, $config);
+}
+
 
 =head2 get_stats_hash
 
@@ -130,13 +173,7 @@ sub _copy_stats {
 
 =head2 add_record_to_stats $record 
 
-Add record to statistics
-
-=over 4
-
-=item $record MARC::Record
-
-=back
+Add $record to statistics.
 
 =cut
 
@@ -149,7 +186,7 @@ sub add_record_to_stats {
 	
 	$stats->{nrecords}++;
 	
-	my $record_stats = $self->get_record_stat($record);
+	my $record_stats = $self->get_record_stats($record);
 	
 	foreach my $tag ( keys %$record_stats ) {
 		$stats->{tags}->{$tag}->{occurence}++;
@@ -171,7 +208,17 @@ sub add_record_to_stats {
 	}
 }
 
-sub get_record_stat {
+=head2 get_record_stats $record
+
+returns a reference to a hash:  { <tag> => <tag_data> }
+where <tag_data> is a reference to a hash with the keys
+I<occurence> - how many times the field with the tag
+<tag> was found in the record, I<subtags> - result of
+subtag_stats.
+
+=cut
+
+sub get_record_stats {
 	my ($self, $record) = @_;
 	my $stats;
 	
@@ -189,13 +236,11 @@ sub get_record_stat {
 
 =head2 subtag_stats $field
 
-returns <subtag_stat>
+returns a reference to a hash { <subtag letter> => <occurence> }
+where <occurence> is the number of times the subfield with
+the code <subtag letter> was found in the fied $field.
 
-=over 4
-
-=item $field MARC::Field
-
-=back
+$field is MARC::Field
 
 =cut
 

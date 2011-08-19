@@ -4,8 +4,9 @@ author:
   - 'Andrei V. Toutoukine <tut@isuct.ru>'
 build_requires:
   Test::Most: 0
-dynamic_config: 0
-generated_by: 'Module::Build version 0.3624'
+configure_requires:
+  Module::Build: 0.36
+generated_by: 'Module::Build version 0.3607'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -14,10 +15,13 @@ name: MARC-Record-Stats
 provides:
   MARC::Record::Stats:
     file: lib/MARC/Record/Stats.pm
-    version: v0.0.1
+    version: v0.0.3
+  MARC::Record::Stats::Report:
+    file: lib/MARC/Record/Stats/Report.pm
 requires:
+  Getopt::Euclid: 0
   MARC::Record: 0
   version: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: v0.0.1
+version: v0.0.3
