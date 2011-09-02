@@ -12,11 +12,11 @@ MARC::Record::Stats - scans one or many MARC::Record and gives a statistics on t
 
 =head1 VERSION
 
-Version 0.0.3
+Version 0.0.4
 
 =cut
 
-our $VERSION = qv('0.0.3');
+our $VERSION = qv('0.0.4');
 
 
 =head1 SYNOPSIS

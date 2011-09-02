@@ -15,7 +15,7 @@ name: MARC-Record-Stats
 provides:
   MARC::Record::Stats:
     file: lib/MARC/Record/Stats.pm
-    version: v0.0.3
+    version: v0.0.4
   MARC::Record::Stats::Report:
     file: lib/MARC/Record/Stats/Report.pm
 requires:
@@ -24,4 +24,4 @@ requires:
   version: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: v0.0.3
+version: v0.0.4
